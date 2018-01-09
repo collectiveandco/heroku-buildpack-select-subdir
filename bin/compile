@@ -100,6 +100,15 @@ execute_buildpack_at_subdir() {
 	  echo 'Copying Procfile...'
       cp $BUILD_DIR/$subdir/Procfile $BUILD_DIR/
 
+      # Copies app.json from the subdir to the root directory to enable review apps is provided
+      echo 'Detecting app.json...'
+      if [ -f $BUILD_DIR/$subdir/app.json ]; then
+	  echo "Copying app.json..."
+	  cp $BUILD_DIR/$subdir/app.json $BUILD_DIR/
+      else
+          echo "No app.json detected. Moving on."
+      fi
+
       # Writes the profile file which initializes paths and sources
       # other profile files
 	  echo 'Creating .profile.d...'
