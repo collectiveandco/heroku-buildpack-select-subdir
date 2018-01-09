@@ -104,7 +104,7 @@ execute_buildpack_at_subdir() {
       echo 'Detecting app.json...'
       if [ -f $BUILD_DIR/$subdir/app.json ]; then
 	  echo "Copying app.json..."
-	  cp $BUILD_DIR/$subdir/app.json $BUILD_DIR/
+	  cp -rf $BUILD_DIR/$subdir/app.json $BUILD_DIR/
       else
           echo "No app.json detected. Moving on."
       fi
