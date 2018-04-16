@@ -117,6 +117,15 @@ execute_buildpack_at_subdir() {
     else
       echo "No static.json detected. Moving on."
     fi
+    
+    # Copies package.json from the subdir to the root directory
+    echo 'Detecting package.json...'
+    if [ -f $BUILD_DIR/$subdir/package.json ]; then
+  	  echo "Copying package.json..."
+  	  cp -rf $BUILD_DIR/$subdir/package.json $BUILD_DIR/
+    else
+      echo "No package.json detected. Moving on."
+    fi
 
       # Writes the profile file which initializes paths and sources
       # other profile files
