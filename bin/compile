@@ -51,7 +51,7 @@ execute_buildpack_at_subdir() {
 
   if [ "$url" != "" ]; then
     echo 'Moving subdirectory to app...'
-    mv $BUILD_DIR/$subdir $BUILD_DIR -T
+     
     
     echo "=====> Downloading Buildpack: $url, branch: $branch, to tmp dir $dir, against source's subdir: $subdir"
 
