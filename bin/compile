@@ -50,6 +50,7 @@ execute_buildpack_at_subdir() {
   fi
 
   if [ "$url" != "" ]; then
+    ls $BUILD_DIR
     echo 'Moving subdirectory to app...'
     mv $BUILD_DIR/$subdir $BUILD_DIR -T
     
