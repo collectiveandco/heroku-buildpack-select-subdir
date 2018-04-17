@@ -50,6 +50,42 @@ execute_buildpack_at_subdir() {
   fi
 
   if [ "$url" != "" ]; then
+    # Copies the Procfile from the subdir to the root directory
+    echo 'Detecting Procfile...'
+    if [ -f $BUILD_DIR/$subdir/Procfile ]; then
+      echo 'Copying Procfile...'
+      cp $BUILD_DIR/$subdir/Procfile $BUILD_DIR/
+    else
+      echo "No Procfile detected. Moving on."
+    fi
+
+    # Copies app.json from the subdir to the root directory to enable review apps is provided
+    echo 'Detecting app.json...'
+    if [ -f $BUILD_DIR/$subdir/app.json ]; then
+      echo "Copying app.json..."
+      cp -rf $BUILD_DIR/$subdir/app.json $BUILD_DIR/
+    else
+      echo "No app.json detected. Moving on."
+    fi
+  
+    # Copies static.json from the subdir to the root directory to enable static apps
+    echo 'Detecting static.json...'
+    if [ -f $BUILD_DIR/$subdir/static.json ]; then
+      echo "Copying static.json..."
+      cp -rf $BUILD_DIR/$subdir/static.json $BUILD_DIR/
+    else
+      echo "No static.json detected. Moving on."
+    fi
+  
+    # Copies package.json from the subdir to the root directory
+    echo 'Detecting package.json...'
+    if [ -f $BUILD_DIR/$subdir/package.json ]; then
+      echo "Copying package.json..."
+      cp -rf $BUILD_DIR/$subdir/package.json $BUILD_DIR/
+    else
+      echo "No package.json detected. Moving on."
+    fi
+
     echo "=====> Downloading Buildpack: $url, branch: $branch, to tmp dir $dir, against source's subdir: $subdir"
 
     if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
@@ -96,41 +132,10 @@ execute_buildpack_at_subdir() {
         $dir/bin/release $BUILD_DIR/$subdir > $BUILD_DIR/$subdir/last_pack_release.out
       fi
 
-      # Copies the Procfile from the subdir to the root directory
-	  echo 'Copying Procfile...'
-      cp $BUILD_DIR/$subdir/Procfile $BUILD_DIR/
-
-    # Copies app.json from the subdir to the root directory to enable review apps is provided
-    echo 'Detecting app.json...'
-    if [ -f $BUILD_DIR/$subdir/app.json ]; then
-  	  echo "Copying app.json..."
-  	  cp -rf $BUILD_DIR/$subdir/app.json $BUILD_DIR/
-    else
-      echo "No app.json detected. Moving on."
-    fi
-    
-    # Copies static.json from the subdir to the root directory to enable static apps
-    echo 'Detecting static.json...'
-    if [ -f $BUILD_DIR/$subdir/static.json ]; then
-  	  echo "Copying static.json..."
-  	  cp -rf $BUILD_DIR/$subdir/static.json $BUILD_DIR/
-    else
-      echo "No static.json detected. Moving on."
-    fi
-    
-    # Copies package.json from the subdir to the root directory
-    echo 'Detecting package.json...'
-    if [ -f $BUILD_DIR/$subdir/package.json ]; then
-  	  echo "Copying package.json..."
-  	  cp -rf $BUILD_DIR/$subdir/package.json $BUILD_DIR/
-    else
-      echo "No package.json detected. Moving on."
-    fi
-
-      # Writes the profile file which initializes paths and sources
-      # other profile files
-	  echo 'Creating .profile.d...'
-      write_profile "$BUILD_DIR" "$subdir"
+        # Writes the profile file which initializes paths and sources
+        # other profile files
+	     echo 'Creating .profile.d...'
+       write_profile "$BUILD_DIR" "$subdir"
     else
       echo "Couldn't detect any framework for this buildpack. Exiting."
       exit 1
