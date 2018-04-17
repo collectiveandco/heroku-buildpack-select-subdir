@@ -85,6 +85,15 @@ execute_buildpack_at_subdir() {
     else
       echo "No package.json detected. Moving on."
     fi
+    
+    # Copies yarn.lock from the subdir to the root directory to use yarn instead of npm
+    echo 'Detecting yarn.lock...'
+    if [ -f $BUILD_DIR/$subdir/yarn.lock ]; then
+      echo "Copying yarn.lock..."
+      cp -rf $BUILD_DIR/$subdir/yarn.lock $BUILD_DIR/
+    else
+      echo "No yarn.lock detected. Moving on."
+    fi
 
     echo "=====> Downloading Buildpack: $url, branch: $branch, to tmp dir $dir, against source's subdir: $subdir"
 
